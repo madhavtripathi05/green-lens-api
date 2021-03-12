@@ -35,6 +35,11 @@ exports.makePredictions = async (res, cropName) => {
     img_tensor = img_tensor.expandDims(0);
 
     const predictions = await model.predict(img_tensor).dataSync();
+    var maxAccuracy = 0.0;
+
+    predictions.forEach((p) => {
+      if (p > maxAccuracy) maxAccuracy = p;
+    });
 
     output = {};
     output.predictions = predictions;
@@ -43,16 +48,19 @@ exports.makePredictions = async (res, cropName) => {
 
     switch (cropName) {
       case 'cherry':
-        if (output.predictions['0'] === 1) prediction = 'Powdery Mildew';
-        if (output.predictions['1'] === 1) prediction = 'Healthy';
+        if (output.predictions['0'] === maxAccuracy)
+          prediction = 'Powdery Mildew';
+        if (output.predictions['1'] === maxAccuracy) prediction = 'Healthy';
         break;
       case 'peach':
-        if (output.predictions['0'] === 1) prediction = 'Bacterial Spot';
-        if (output.predictions['1'] === 1) prediction = 'Healthy';
+        if (output.predictions['0'] === maxAccuracy)
+          prediction = 'Bacterial Spot';
+        if (output.predictions['1'] === maxAccuracy) prediction = 'Healthy';
         break;
       case 'pepper':
-        if (output.predictions['0'] === 1) prediction = 'Bacterial Spot';
-        if (output.predictions['1'] === 1) prediction = 'Healthy';
+        if (output.predictions['0'] === maxAccuracy)
+          prediction = 'Bacterial Spot';
+        if (output.predictions['1'] === maxAccuracy) prediction = 'Healthy';
         break;
 
       default:
@@ -61,7 +69,7 @@ exports.makePredictions = async (res, cropName) => {
     res.statusCode = 200;
 
     console.log(prediction);
-    res.json({ prediction });
+    res.json({ prediction, accuracy: maxAccuracy });
 
     fs.unlinkSync(imagePath, (error) => {
       if (error) {
