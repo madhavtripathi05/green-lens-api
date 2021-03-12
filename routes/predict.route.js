@@ -33,14 +33,4 @@ router
   .post(upload.single('file'), (_req, res, _next) =>
     controller.makePredictions(res, 'pepper')
   );
-router
-  .route('/potato')
-  .post(upload.single('file'), (_req, res, _next) =>
-    controller.makePredictions(res, 'potato')
-  );
-router
-  .route('/strawberry')
-  .post(upload.single('file'), (_req, res, _next) =>
-    controller.makePredictions(res, 'strawberry')
-  );
 module.exports = router;

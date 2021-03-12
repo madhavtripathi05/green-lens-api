@@ -54,15 +54,6 @@ exports.makePredictions = async (res, cropName) => {
         if (output.predictions['0'] === 1) prediction = 'Bacterial Spot';
         if (output.predictions['1'] === 1) prediction = 'Healthy';
         break;
-      case 'potato':
-        if (output.predictions['0'] === 1) prediction = 'Early Blight';
-        if (output.predictions['1'] === 1) prediction = 'Healthy';
-        if (output.predictions['2'] === 1) prediction = 'Late Blight';
-        break;
-      case 'strawberry':
-        if (output.predictions['0'] === 1) prediction = 'Leaf Scorch';
-        if (output.predictions['1'] === 1) prediction = 'Healthy';
-        break;
 
       default:
         break;
